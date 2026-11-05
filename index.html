@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smarter Every Day — Content Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#2C3A60; --deep:#051A40; --yellow:#F4C620; --white:#FFFFFF;
+  --soft:#EEF3FC; --line:rgba(5,26,64,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:'Open Sans',sans-serif;background:var(--deep);color:var(--deep)}
+.deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+
+/* ---------- Slides ---------- */
+.slide{position:absolute;inset:0;padding:clamp(24px,5vw,72px) clamp(20px,7vw,110px) 110px;
+  display:flex;flex-direction:column;justify-content:center;overflow-y:auto;
+  opacity:0;visibility:hidden;transform:translateX(60px);
+  transition:opacity .7s ease,transform .7s ease,visibility .7s;background:var(--white)}
+.slide.active{opacity:1;visibility:visible;transform:none;z-index:2}
+.slide.prev{transform:translateX(-60px)}
+.slide.dark{background:linear-gradient(135deg,var(--deep),var(--navy));color:var(--white)}
+.slide.dark h2,.slide.dark h1{color:var(--white)}
+.slide::before{content:"";position:absolute;right:-120px;top:-120px;width:340px;height:340px;border-radius:50%;
+  background:var(--yellow);opacity:.14;pointer-events:none}
+.slide.dark::after{content:"";position:absolute;left:-80px;bottom:-80px;width:260px;height:260px;border-radius:50%;
+  border:36px solid var(--yellow);opacity:.12;pointer-events:none}
+
+/* reveal animation for children */
+.slide.active .rv{animation:rise .7s both}
+.slide.active .rv:nth-child(2){animation-delay:.1s}
+.slide.active .rv:nth-child(3){animation-delay:.2s}
+.slide.active .rv:nth-child(4){animation-delay:.3s}
+.slide.active .rv:nth-child(5){animation-delay:.4s}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+.eyebrow{display:inline-block;align-self:flex-start;background:var(--yellow);color:var(--deep);font:700 .8rem 'Inter';
+  letter-spacing:.14em;text-transform:uppercase;padding:6px 14px;border-radius:999px;margin-bottom:16px}
+h1{font:800 clamp(2.2rem,6vw,4.6rem)/1.05 'Inter';color:var(--deep);letter-spacing:-.02em}
+h1 em,h2 em{font-style:normal;color:var(--yellow)}
+h2{font:800 clamp(1.7rem,3.8vw,3rem)/1.1 'Inter';color:var(--deep);margin-bottom:10px;letter-spacing:-.01em}
+.script{font:700 clamp(1.3rem,2.4vw,2rem) 'Caveat';color:var(--navy)}
+.dark .script{color:var(--yellow)}
+.lead{font-size:clamp(1rem,1.5vw,1.25rem);line-height:1.6;max-width:62ch;opacity:.85;margin:10px 0 24px}
+.bar{width:90px;height:6px;border-radius:6px;background:var(--yellow);margin:18px 0}
+
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+.split{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(20px,4vw,56px);align-items:center}
+@media(max-width:860px){.g2,.g3,.g4,.split{grid-template-columns:1fr}}
+
+.card{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:20px 22px}
+.dark .card{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14)}
+.card h3{font:700 1.1rem 'Inter';margin-bottom:6px}
+.card p{font-size:.95rem;line-height:1.5;opacity:.85}
+.num{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--deep);color:var(--white);
+  font:700 1rem 'Inter';margin-bottom:10px}
+.dark .num{background:var(--yellow);color:var(--deep)}
+
+/* Image / placeholder */
+.img{position:relative;border-radius:18px;overflow:hidden;background:var(--soft);border:2px dashed rgba(44,58,96,.3);
+  display:grid;place-items:center;text-align:center;min-height:220px;color:var(--navy);font:600 .9rem 'Inter';padding:12px}
+.img img{width:100%;height:100%;object-fit:contain;display:block;background:#fff}
+.img.has{border:none;box-shadow:0 18px 40px rgba(5,26,64,.25)}
+.img.tall{aspect-ratio:3/4;max-height:68vh;margin:auto}
+.cap{font:600 .85rem 'Inter';margin-top:8px;text-align:center;opacity:.8}
+
+/* Schedule table */
+.tbl{width:100%;border-collapse:separate;border-spacing:0 8px;font-size:clamp(.8rem,1.2vw,1rem)}
+.tbl th{font:700 .75rem 'Inter';letter-spacing:.12em;text-transform:uppercase;text-align:left;padding:6px 14px;color:var(--yellow)}
+.tbl td{background:rgba(255,255,255,.09);padding:12px 14px}
+.tbl td:first-child{border-radius:12px 0 0 12px;font-weight:700} .tbl td:last-child{border-radius:0 12px 12px 0}
+.pill{background:var(--yellow);color:var(--deep);font:700 .72rem 'Inter';padding:4px 10px;border-radius:999px;white-space:nowrap}
+
+/* Brand kit */
+.swatches{display:flex;gap:16px;flex-wrap:wrap}
+.sw{text-align:center;font:600 .8rem 'Inter'}
+.sw i{display:block;width:76px;height:76px;border-radius:50%;margin-bottom:6px;border:1px solid var(--line);box-shadow:0 6px 14px rgba(0,0,0,.15)}
+.fonts{display:flex;gap:22px;flex-wrap:wrap}
+.fonts div{font-size:.85rem} .fonts b{display:block;font-size:2.2rem;line-height:1}
+.icons{display:flex;gap:14px;flex-wrap:wrap}
+.icons span{width:60px;height:60px;border-radius:16px;background:var(--yellow);display:grid;place-items:center;font-size:1.7rem}
+.logo-box{background:#fff;border-radius:18px;padding:18px;display:grid;place-items:center;min-height:150px}
+.logo-box img{max-width:100%;max-height:150px}
+
+/* KPIs */
+.kpi b{display:block;font:800 clamp(2rem,4vw,3.2rem) 'Inter';color:var(--yellow)}
+.kpi span{font-size:.9rem;opacity:.85}
+
+/* ---------- Chrome ---------- */
+.progress{position:absolute;top:0;left:0;height:5px;width:0;background:var(--yellow);z-index:20}
+.brand{position:absolute;top:18px;left:clamp(20px,4vw,48px);z-index:15;font:800 .85rem 'Inter';letter-spacing:.1em;
+  color:var(--navy);text-transform:uppercase}
+.deck.on-dark .brand{color:var(--white)}
+.counter{position:absolute;top:18px;right:clamp(20px,4vw,48px);z-index:15;font:700 .85rem 'Inter';color:var(--navy)}
+.deck.on-dark .counter{color:var(--white)}
+.nav{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:20;display:flex;gap:14px;align-items:center;
+  background:rgba(5,26,64,.92);padding:10px 18px;border-radius:999px;backdrop-filter:blur(8px)}
+.nav button{all:unset;cursor:pointer;color:#fff;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;font-size:1.05rem;transition:.2s}
+.nav button:hover{background:var(--yellow);color:var(--deep)}
+.dots{display:flex;gap:8px}
+.dots b{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.35);cursor:pointer;transition:.3s}
+.dots b.on{background:var(--yellow);width:26px;border-radius:9px}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+  <div class="progress" id="progress"></div>
+  <div class="brand">Smarter Every Day</div>
+  <div class="counter" id="counter"></div>
+  <div id="slides"></div>
+  <div class="nav">
+    <button id="prev" title="Previous (←)">&#10094;</button>
+    <div class="dots" id="dots"></div>
+    <button id="play" title="Play / Pause (Space)">&#10074;&#10074;</button>
+    <button id="next" title="Next (→)">&#10095;</button>
+    <button id="fs" title="Fullscreen (F)">&#9974;</button>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   ✏️  EDIT HERE — this is the only section you need to change.
+   Each object in SLIDES is one slide. Add / remove / reorder freely.
+   Images: put files in an /assets folder and set  img: "assets/name.jpg"
+   (leave img empty "" to show a dashed placeholder).
+   ===================================================================== */
+const SETTINGS = {
+  autoplayMs: 9000,          // time per slide
+  loop: true
+};
+
+const SLIDES = [
+  /* ---------- 1. COVER ---------- */
+  { type:"cover", dark:true,
+    eyebrow:"Content Proposal • 2026",
+    title:"Smarter <em>Every</em> Day",
+    script:"Small Steps. Better Habits. Smarter Decisions.",
+    text:"A social-media content concept built to educate, engage and grow your audience.",
+    meta:"Presented by: Group 6  |  Prepared for: Stacy" },
+
+  /* ---------- 2. OVERVIEW ---------- */
+  { type:"cards", eyebrow:"Overview", title:"What we’re <em>proposing</em>",
+    text:"A consistent, visual-first content series that turns everyday topics into shareable, helpful infographics.",
+    cards:[
+      {t:"Article Content", p:"3 research-backed articles with ready-to-post infographics."},
+      {t:"Posting Schedule", p:"A realistic 2-week calendar across your key channels."},
+      {t:"Visual Identity", p:"A cohesive brand kit: colors, type, logo and iconography."},
+      {t:"Strategy", p:"Clear goals, audience and KPIs that show what success looks like."}
+    ]},
+
+  /* ---------- 3-5. ARTICLES (copy this block for more) ---------- */
+  { type:"article", eyebrow:"Article 01", title:"Top 5 <em>Productivity</em> Hacks for Remote Professionals",
+    text:"Practical tips to stay focused and balanced while working from home.",
+    points:["Create a dedicated workspace","Plan your day ahead","Follow the Pomodoro technique","Minimize digital distractions","Set clear work-life boundaries"],
+    img:"1.jpg" },
+
+  { type:"article", dark:true, eyebrow:"Article 02", title:"Habit-Building Strategy: <em>Tips & Tricks</em> for a More Productive Life",
+    text:"Small, consistent actions that compound into big changes.",
+    points:["Start small","Set clear and achievable goals","Create a daily routine","Track your progress","Reward yourself"],
+    img:"2.jpg" },
+
+  { type:"article", eyebrow:"Article 03", title:"Top 10 Reasons Why You Should Get <em>Insurance</em>",
+    text:"A clear, friendly look at protecting what matters most.",
+    points:["Financial protection","Medical expense coverage","Family security","Emergency preparedness","Peace of mind & long-term planning"],
+    img:"3.jpg" },
+
+  /* ---------- 6. POSTING SCHEDULE ---------- */
+{ type:"schedule", dark:true, eyebrow:"Posting Schedule", title:"Our 2-week <em>content calendar</em>",
+    rows:[
+      // [Date, Platform, Content, Format, Time]
+      ["Mon, Nov 9",  "Facebook",  "Article 01 — Productivity Hacks", "Infographic", "9:00 AM"],
+      ["Tue, Nov 10", "LinkedIn",  "Industry Insights & Trends",      "Post",        "10:00 AM"],
+      ["Tue, Nov 10", "Instagram", "Behind-the-Scenes Carousel",     "Carousel",    "11:00 AM"],
+      ["Tue, Nov 10", "Blog",      "Ultimate Guide to Content Marketing", "Blog Post", "12:00 AM"],
+      ["Wed, Nov 11", "Instagram", "Article 01 — carousel breakdown", "Carousel",    "12:00 PM"],
+      ["Fri, Nov 13", "LinkedIn",  "Article 02 — Habit-Building",     "Infographic", "8:00 AM"],
+      ["Mon, Nov 16", "Facebook",  "Article 02 — key takeaways",      "Reel / Short","7:00 PM"],
+      ["Wed, Nov 18", "Facebook",  "Article 03 — Insurance",          "Infographic", "9:00 AM"],
+      ["Fri, Nov 20", "Instagram", "Article 03 — Top 10 carousel",    "Carousel",    "12:00 PM"]
+    ]},
+
+  /* ---------- 7. VISUALS ---------- */
+  { type:"visuals", eyebrow:"Visuals", title:"The <em>look</em> of every post",
+    text:"Bold headlines, friendly illustrations and a consistent layout make each post instantly recognizable.",
+    items:[
+      {img:"1.jpg", cap:"Productivity Hacks"},
+      {img:"2.jpg", cap:"Habit-Building"},
+      {img:"3.jpg", cap:"Insurance"}
+    ]},
+
+  /* ---------- 8. BRAND KIT ---------- */
+  { type:"brandkit", dark:true, eyebrow:"Brand Kit", title:"One identity, <em>everywhere</em>",
+    tagline:"Small Steps. Better Habits. Smarter Decisions.",
+    logo:"logo.jpeg",
+    colors:[["#2C3A60","Navy"],["#F4C620","Yellow"],["#FFFFFF","White"],["#051A40","Deep Navy"]],
+    fonts:[["Tan Astoria","Headlines"],["Caveat","Accents"],["Open Sans","Body"],["Inter","UI / Captions"],["Gotham","Titles"]],
+    icons:["🎯","📈","🙂","🤍","💡","⭐","✅","🛡️","📅","🚫"] },
+
+  /* ---------- 9. STRATEGY ---------- */
+  { type:"strategy", eyebrow:"Overall Strategy", title:"Why this <em>works</em>",
+    pillars:[
+      {t:"Educate", p:"Useful, bite-sized tips people save and share."},
+      {t:"Engage", p:"Relatable topics (work, habits, money) that invite comments."},
+      {t:"Build Trust", p:"A consistent voice and look that feels dependable."},
+      {t:"Grow", p:"Shareable visuals that expand reach organically."}
+    ],
+    kpis:[["+30%","Reach in 30 days"],["+20%","Engagement rate"],["3×","Saves & shares"],["6","Posts in 2 weeks"]] },
+
+  /* ---------- 10. CLOSING ---------- */
+  { type:"cover", dark:true, eyebrow:"Next Steps",
+    title:"Let’s make it <em>happen</em>",
+    script:"Small habits… big changes!",
+    text:"Approve the concept and we’ll begin production and scheduling right away.",
+    meta:"Group 6" }
+];
+/* ===================== END OF EDITABLE SECTION ===================== */
+
+
+/* ---------- Renderers ---------- */
+const img = (src,cls="",cap="") => src
+  ? `<div><div class="img has ${cls}"><img src="${src}" alt="${cap}" onerror="this.parentNode.className='img ${cls}';this.parentNode.innerHTML='Add image:<br>${src}'"></div>${cap?`<div class="cap">${cap}</div>`:""}</div>`
+  : `<div><div class="img ${cls}">Add your image here</div>${cap?`<div class="cap">${cap}</div>`:""}</div>`;
+
+const R = {
+  cover:s=>`<div class="eyebrow rv">${s.eyebrow||""}</div>
+    <h1 class="rv">${s.title}</h1><div class="bar rv"></div>
+    <div class="script rv">${s.script||""}</div>
+    <p class="lead rv">${s.text||""}</p><p class="rv" style="opacity:.7;font-size:.9rem">${s.meta||""}</p>`,
+
+  cards:s=>`<div class="eyebrow rv">${s.eyebrow}</div><h2 class="rv">${s.title}</h2>
+    <p class="lead rv">${s.text||""}</p>
+    <div class="grid g4 rv">${s.cards.map((c,i)=>`<div class="card"><span class="num">${i+1}</span><h3>${c.t}</h3><p>${c.p}</p></div>`).join("")}</div>`,
+
+  article:s=>`<div class="split"><div>
+      <div class="eyebrow rv">${s.eyebrow}</div><h2 class="rv">${s.title}</h2>
+      <p class="lead rv">${s.text||""}</p>
+      <div class="grid rv" style="gap:10px">${s.points.map((p,i)=>`<div class="card" style="padding:10px 16px;display:flex;gap:12px;align-items:center"><span class="num" style="margin:0;width:30px;height:30px;font-size:.85rem">${i+1}</span><b style="font:600 .95rem Inter">${p}</b></div>`).join("")}</div>
+    </div><div class="rv">${img(s.img,"tall")}</div></div>`,
+
+  schedule:s=>`<div class="eyebrow rv">${s.eyebrow}</div><h2 class="rv">${s.title}</h2>
+    <div class="rv" style="overflow-x:auto"><table class="tbl"><tr><th>Date</th><th>Platform</th><th>Content</th><th>Format</th><th>Time</th></tr>
+    ${s.rows.map(r=>`<tr><td>${r[0]}</td><td><span class="pill">${r[1]}</span></td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td></tr>`).join("")}</table></div>`,
+
+  visuals:s=>`<div class="eyebrow rv">${s.eyebrow}</div><h2 class="rv">${s.title}</h2>
+    <p class="lead rv" style="margin-bottom:14px">${s.text||""}</p>
+    <div class="grid g3 rv">${s.items.map(i=>img(i.img,"tall",i.cap)).join("")}</div>`,
+
+  brandkit:s=>`<div class="eyebrow rv">${s.eyebrow}</div><h2 class="rv">${s.title}</h2>
+    <div class="script rv" style="margin-bottom:16px">${s.tagline}</div>
+    <div class="grid g2 rv">
+      <div class="card"><h3>Color Palette</h3><div class="swatches" style="margin-top:12px">${s.colors.map(c=>`<div class="sw"><i style="background:${c[0]}"></i>${c[0]}<br><small>${c[1]}</small></div>`).join("")}</div></div>
+      <div class="card"><h3>Logo</h3><div class="logo-box" style="margin-top:10px">${s.logo?`<img src="${s.logo}" alt="Logo" onerror="this.outerHTML='<span style=color:#2C3A60;font-weight:700>Add logo: ${s.logo}</span>'">`:"Add logo"}</div></div>
+      <div class="card"><h3>Typography</h3><div class="fonts" style="margin-top:12px">${s.fonts.map(f=>`<div><b>Aa</b>${f[0]}<br><small style="opacity:.7">${f[1]}</small></div>`).join("")}</div></div>
+      <div class="card"><h3>Iconography</h3><div class="icons" style="margin-top:12px">${s.icons.map(i=>`<span>${i}</span>`).join("")}</div></div>
+    </div>`,
+
+  strategy:s=>`<div class="eyebrow rv">${s.eyebrow}</div><h2 class="rv">${s.title}</h2>
+    <div class="grid g4 rv" style="margin:14px 0 22px">${s.pillars.map((c,i)=>`<div class="card"><span class="num">${i+1}</span><h3>${c.t}</h3><p>${c.p}</p></div>`).join("")}</div>
+    <div class="grid g4 rv" style="background:var(--deep);color:#fff;border-radius:18px;padding:22px 26px">${s.kpis.map(k=>`<div class="kpi"><b>${k[0]}</b><span>${k[1]}</span></div>`).join("")}</div>`
+};
+
+/* ---------- Carousel engine ---------- */
+const $=id=>document.getElementById(id);
+const wrap=$("slides"), dots=$("dots"), deck=$("deck"), bar=$("progress");
+let cur=0, playing=true, t0=0, raf;
+
+wrap.innerHTML = SLIDES.map(s=>`<section class="slide ${s.dark?"dark":""}">${R[s.type](s)}</section>`).join("");
+dots.innerHTML = SLIDES.map((_,i)=>`<b data-i="${i}"></b>`).join("");
+const els=[...wrap.children], dotEls=[...dots.children];
+
+function go(n, restart=true){
+  if(n>=SLIDES.length) n = SETTINGS.loop?0:SLIDES.length-1;
+  if(n<0) n = SETTINGS.loop?SLIDES.length-1:0;
+  els.forEach((e,i)=>{e.classList.toggle("active",i===n);e.classList.toggle("prev",i<n);if(i===n)e.scrollTop=0});
+  dotEls.forEach((d,i)=>d.classList.toggle("on",i===n));
+  deck.classList.toggle("on-dark", !!SLIDES[n].dark);
+  $("counter").textContent=`${String(n+1).padStart(2,"0")} / ${String(SLIDES.length).padStart(2,"0")}`;
+  cur=n; if(restart) t0=performance.now();
+}
+function tick(now){
+  if(playing){
+    const p=Math.min((now-t0)/SETTINGS.autoplayMs,1);
+    bar.style.width=(p*100)+"%";
+    if(p>=1) go(cur+1);
+  }
+  raf=requestAnimationFrame(tick);
+}
+function setPlay(v){playing=v;$("play").innerHTML=v?"&#10074;&#10074;":"&#9654;";t0=performance.now()-(parseFloat(bar.style.width)||0)/100*SETTINGS.autoplayMs}
+
+$("next").onclick=()=>go(cur+1);
+$("prev").onclick=()=>go(cur-1);
+$("play").onclick=()=>setPlay(!playing);
+$("fs").onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+dots.onclick=e=>{if(e.target.dataset.i!==undefined)go(+e.target.dataset.i)};
+addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight")go(cur+1); else if(e.key==="ArrowLeft")go(cur-1);
+  else if(e.key===" "){e.preventDefault();setPlay(!playing)} else if(e.key.toLowerCase()==="f")$("fs").click();
+});
+/* pause while hovering the slide, swipe on touch */
+let hov=false; wrap.onmouseenter=()=>{if(playing){hov=true;setPlay(false)}}; wrap.onmouseleave=()=>{if(hov){hov=false;setPlay(true)}};
+let sx=0; wrap.addEventListener("touchstart",e=>sx=e.touches[0].clientX,{passive:true});
+wrap.addEventListener("touchend",e=>{const d=e.changedTouches[0].clientX-sx;if(Math.abs(d)>50)go(cur+(d<0?1:-1))});
+
+go(0); raf=requestAnimationFrame(tick);
+</script>
+</body>
+</html>
